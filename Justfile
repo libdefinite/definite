@@ -13,13 +13,13 @@ proto-lint:
 tidy:
     go mod tidy
 
-# Format code (requires: go install golang.org/x/tools/cmd/goimports@latest)
+# Format code
 format:
-    goimports -w -local github.com/libdefinite/definite $(find . -name "*.go" -not -path "./gen/*")
+    go tool goimports -w -local github.com/libdefinite/definite $(find . -name "*.go" -not -path "./gen/*")
 
-# Lint code (requires: golangci-lint)
+# Lint code
 lint:
-    golangci-lint run
+    go tool golangci-lint run
 
 # Build CLI binary
 build-cli:

@@ -1,0 +1,19 @@
+{
+    "name": "Definite",
+    "image": "mcr.microsoft.com/devcontainers/go:1.26",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "golang.go",
+                "bufbuild.vscode-buf",
+                "skellock.just"
+            ],
+            "settings": {
+                "go.toolsManagement.checkForUpdates": "local",
+                "go.useLanguageServer": true,
+                "buf.binaryPath": "/usr/local/bin/buf"
+            }
+        }
+    },
+    "postCreateCommand": "sudo bash .devcontainer/install-tools.sh && go mod download && go tool lefthook install"
+}
