@@ -9,30 +9,39 @@ proto:
 proto-lint:
     buf lint proto
 
-# Tidy dependencies
-tidy:
-    go mod tidy
-
 # Format code
 format:
-    go tool goimports -w -local github.com/libdefinite/definite $(find . -name "*.go" -not -path "./gen/*")
+    go tool goimports \
+        -w \
+        -local github.com/libdefinite/definite \
+        $(find . -name "*.go" -not -path "./gen/*")
+    go tool templ fmt .
 
 # Lint code
 lint:
     go tool golangci-lint run
+    go tool templ fmt -fail .
+
+# Format and lint docs markdown files
+docs:
+    prettier --write "docs/**/*.md"
+    markdownlint "docs/**/*.md"
+
+# Generate templ files
+templ:
+    go tool templ generate
+
+# Build Tailwind CSS (pass minify=true to minify)
+css minify="false":
+    npx @tailwindcss/cli \
+        -i ./internal/ctl/web/static/input.css \
+        -o ./internal/ctl/web/static/output.css \
+        {{ if minify == "true" { "--minify" } else { "" } }}
 
 # Build CLI binary
-build-cli:
-    go build -o bin/definite ./cmd/cli
+build: templ css
+    go build -o bin/def ./cmd/def
 
-# Build server binary
-build-server:
-    go build -o bin/server ./cmd/server
-
-# Run server
-serve:
-    go run ./cmd/server
-
-# Run CLI (pass args with: just run -- --flag value)
-run *ARGS:
-    go run ./cmd/cli {{ ARGS }}
+# Run  (pass args with: just run -- --flag value)
+run *ARGS: templ css
+    go run ./cmd/def {{ ARGS }}

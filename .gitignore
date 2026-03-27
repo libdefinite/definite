@@ -52,3 +52,10 @@ certs/
 *.crt
 
 gen/
+
+# Templ generated files
+*_templ.go
+
+# Node
+node_modules/
+internal/ctl/web/static/output.css

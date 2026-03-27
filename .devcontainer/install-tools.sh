@@ -12,3 +12,9 @@ echo "buf ${BUF_VERSION} installed"
 echo "Installing just..."
 curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
 echo "just $(just --version) installed"
+
+# Install markdownlint-cli and prettier
+echo "Installing markdownlint-cli and prettier..."
+npm install -g markdownlint-cli prettier
+echo "markdownlint $(markdownlint --version) installed"
+echo "prettier $(prettier --version) installed"
