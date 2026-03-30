@@ -22,10 +22,14 @@ jobs:
         with:
           just-version: "1.46.0"
 
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: package.json
+
       - uses: bufbuild/buf-setup-action@v1.50.0
 
       - name: Generate
-        run: just proto && just templ
+        run: npm install && just proto && just templ && just css
 
       - name: Lint
         run: just lint && just proto-lint

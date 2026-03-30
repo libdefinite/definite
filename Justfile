@@ -58,9 +58,9 @@ coverage:
     go tool cover -html=coverage.filtered.out -o coverage.html
 
 # Build CLI binary
-build: templ css
+build: proto templ (css "true")
     go build -o bin/def ./cmd/def
 
 # Run  (pass args with: just run -- --flag value)
-run *ARGS: templ css
+run *ARGS: proto templ css
     go run ./cmd/def {{ ARGS }}

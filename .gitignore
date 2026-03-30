@@ -61,3 +61,6 @@ gen/
 # Node
 node_modules/
 internal/ctl/web/static/output.css
+
+# Tailwind generated file
+internal/ctl/console/static/output.css
