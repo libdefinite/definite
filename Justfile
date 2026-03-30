@@ -2,8 +2,12 @@ default:
     @just --list
 
 # Generate Go code from proto files
-proto:
+proto: proto-clean
     buf generate proto
+
+# Clean generated proto files
+proto-clean:
+    rm -rf gen/
 
 # Lint proto files
 proto-lint:
@@ -28,8 +32,12 @@ md-lint:
     markdownlint "**/*.md" --ignore-path .gitignore
 
 # Generate templ files
-templ:
+templ: templ-clean
     go tool templ generate
+
+# Clean generated templ files
+templ-clean:
+    find . -name "*_templ.go" | xargs rm -f
 
 # Build Tailwind CSS (pass minify=true to minify)
 css minify="false":
