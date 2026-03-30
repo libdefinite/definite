@@ -5,11 +5,15 @@ templ Home() {
 		<main class="min-h-screen bg-gray-50 flex items-center justify-center">
 			<div class="bg-white rounded-2xl shadow-md p-10 flex flex-col gap-4 max-w-md w-full">
 				<h1 class="text-2xl font-bold text-gray-900">Definite</h1>
-				<p class="text-gray-500">Control panel is running.</p>
-				<span class="inline-flex items-center gap-2 text-sm text-green-600 font-medium">
-					<span class="w-2 h-2 rounded-full bg-green-500"></span>
-					Online
-				</span>
+				<div x-data="{ count: 0 }" class="flex items-center gap-2 text-sm text-gray-500">
+					<span>Alpine.js:</span>
+					<button @click="count++" class="px-2 py-1 rounded bg-gray-100 hover:bg-gray-200">clicks: <span x-text="count"></span></button>
+				</div>
+				<div class="text-sm text-gray-500">
+					<span>HTMX: </span>
+					<button hx-get="/health" hx-target="#htmx-result" class="px-2 py-1 rounded bg-gray-100 hover:bg-gray-200">ping</button>
+					<span id="htmx-result"></span>
+				</div>
 			</div>
 		</main>
 	}

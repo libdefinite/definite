@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/libdefinite/definite/internal/ctl"
 	"github.com/spf13/cobra"
+
+	"github.com/libdefinite/definite/internal/ctl"
 )
 
 func ctlCmd() *cobra.Command {
@@ -11,6 +12,6 @@ func ctlCmd() *cobra.Command {
 		Short: "Control the server via gRPC",
 	}
 
-	c.AddCommand(ctl.FetchCtlCmd(), ctl.WebCtlCmd())
+	c.AddCommand(ctl.StatusCmd(), ctl.ConsoleCmd())
 	return c
 }

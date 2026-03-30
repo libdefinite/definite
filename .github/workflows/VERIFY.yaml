@@ -29,7 +29,7 @@ jobs:
       - uses: bufbuild/buf-setup-action@v1.50.0
 
       - name: Generate
-        run: npm install && just proto && just templ && just css
+        run: npm install && just proto && just templ && just js && just css
 
       - name: Lint
         run: just lint && just proto-lint

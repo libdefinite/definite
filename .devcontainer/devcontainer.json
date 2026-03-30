@@ -29,6 +29,6 @@
     "postCreateCommand": {
         "tmux": "cp .devcontainer/tmux.conf ~/.tmux.conf && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm",
         "npm": "npm install -g markdownlint-cli prettier && npm install",
-        "go": "go mod download && go tool lefthook install"
+        "go": "go mod download && go tool lefthook install && go install github.com/air-verse/air@latest"
     }
 }
