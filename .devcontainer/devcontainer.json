@@ -7,7 +7,7 @@
         "ghcr.io/mrsimonemms/devcontainers/buf:1": {},
         "ghcr.io/guiyomh/features/just:0": {},
         "ghcr.io/devcontainers-extra/features/tmux-apt-get:1": {},
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+        "ghcr.io/devcontainers/features/docker-in-docker:2": { "moby": false }
     },
     "customizations": {
         "vscode": {
@@ -15,7 +15,10 @@
                 "golang.go",
                 "bufbuild.vscode-buf",
                 "skellock.just",
-                "bierner.markdown-mermaid"
+                "bierner.markdown-mermaid",
+                "davidanson.vscode-markdownlint",
+                "yzhang.markdown-all-in-one",
+                "redhat.vscode-yaml"
             ],
             "settings": {
                 "go.toolsManagement.checkForUpdates": "local",

@@ -1,16 +1,15 @@
-name: PR Verification
+name: Verify
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  lint:
-    uses: ./.github/workflows/_lint.yaml
-
-  test:
-    needs: lint
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -19,14 +18,19 @@ jobs:
         with:
           go-version-file: go.mod
 
-      - uses: extractions/setup-just@v3
+      - uses: extractions/setup-just@v3.1.0
+        with:
+          just-version: "1.46.0"
 
       - uses: bufbuild/buf-setup-action@v1.50.0
 
-      - name: Generate proto and templ files
+      - name: Generate
         run: just proto && just templ
 
-      - name: Run tests with coverage
+      - name: Lint
+        run: just lint && just proto-lint
+
+      - name: Test with coverage
         run: just coverage
 
       - uses: codecov/codecov-action@v6

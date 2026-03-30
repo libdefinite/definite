@@ -85,9 +85,7 @@ Tailwind CSS scans `*.templ` files and outputs to `internal/ctl/console/static/o
 
 ## GitHub Actions
 
-- `.github/workflows/_lint.yaml` — reusable workflow called by both PR and release workflows
-- `.github/workflows/PR.yaml` — runs on PRs to main: lint + tests (supports testcontainers)
-- `.github/workflows/RELEASE.yaml` — runs on push to main: lint + coverage upload to codecov.io
+- `.github/workflows/VERIFY.yaml` — runs on PRs and pushes to main: lint job + coverage job (uploaded to codecov.io)
 
 ## Testing
 
