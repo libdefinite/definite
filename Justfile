@@ -23,7 +23,7 @@ lint:
     go tool templ fmt -fail .
 
 # Format and lint markdown files
-docs:
+md-lint:
     prettier --write "**/*.md" --ignore-path .gitignore
     markdownlint "**/*.md" --ignore-path .gitignore
 

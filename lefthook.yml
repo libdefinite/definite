@@ -5,5 +5,5 @@ pre-commit:
             run: just lint
         proto-lint:
             run: just proto-lint
-        docs:
-            run: just docs
+        md-lint:
+            run: just md-lint
