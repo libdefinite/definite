@@ -1,0 +1,94 @@
+# AGENT.md
+
+## Devcontainer
+
+Devcontainer setup in `.devcontainer/devcontainer.json`
+
+1. Go baseimage
+2. Features to enable nodejs, python, `just`, buf, tmux
+3. Markdown linting using `markdown-cli`. Markdown formating with `prettier`
+4. `lefthook install` to setup git hooks
+5. docker in docker for running test-container for testing
+
+## Justfile
+
+This project uses `just` as the task runner (see `Justfile`). Run `just` to see all available options. Tasks cover testing, linting, formatting, proto generation, and building.
+
+## Architecture
+
+**Definite** is an infrastructure orchestration system with a dual-plane, multi-server architecture.
+
+### Entry point
+
+`def` is the name of executable. Entry point for executable is `cmd/def/main.go`. Cobra used for cli. Two top-level subcommands:
+
+- `node` — starts the backend servers (data plane + control plane)
+- `ctl` — client-side tools (web console and definite management from commandline). CTL also has sub commands implemented in `internal/ctl/cmd.go`. Subcommands are as follows
+  - `console`- to start web console
+
+When definite runs in either
+
+1. _ctl mode_ like kubectl
+2. _node mode_ like like kube apiserver (node mode is a unified process for apiserver, kubecontroller, etcd and kubenode etc.)
+
+---
+
+### Node mode
+
+`cmd/def/node.go` starts two gRPC servers concurrently:
+
+Implementation in `internal/node`.
+
+#### GRPC
+
+GRPC handlers implemented in `internal/node/handler`
+
+- Grpc used throughout for node to node communication and ctl to node communication
+- _Data bus_ is grpc server which takes care of ctl to node communication. Proto file in `proto/data`
+- _Control bus_ is grpc server which takes care of node to node communication. Proto files in `proto/control`
+- ConnectRPC used for implementing GRPC servers
+
+#### Proto and generated code
+
+Protos live in `proto/`, organized by plane and version (`control/v1/`, `data/v1/`). Generated code goes to `gen/` (excluded from linting). Never edit files in `gen/` directly — run `just proto` instead.
+
+Code generation config: `buf.gen.yaml` (uses `buf.build/protocolbuffers/go` + `buf.build/connectrpc/go`).
+
+---
+
+### CTL mode
+
+implemented in `internal/ctl`
+
+#### CTL Console
+
+`internal/ctl/console` — implements web console.
+
+- **web console** run using `def ctl console`
+- **Templ** for type-safe, compile-time-checked HTML templates. All templates to be placed in `internal/ctl/console/templates` folder
+- **Tailwind CSS v4** (generated from `internal/ctl/console/static/input.css`)
+- **HTMX** + **Alpine.js** loaded via CDN in the layout template
+
+### Frontend build
+
+Templ templates (`*.templ`) must be compiled to `*_templ.go` before building. `just build` and `just run` handle this automatically. If you edit `.templ` files, run `just templ` or `just format` to regenerate.
+
+#### Tailwind css file output
+
+Tailwind CSS scans `*.templ` files and outputs to `internal/ctl/console/static/output.css`.
+
+### Linting
+
+- Go linting configuration available in .golangci.yaml
+
+---
+
+## GitHub Actions
+
+- `.github/workflows/_lint.yaml` — reusable workflow called by both PR and release workflows
+- `.github/workflows/PR.yaml` — runs on PRs to main: lint + tests (supports testcontainers)
+- `.github/workflows/RELEASE.yaml` — runs on push to main: lint + coverage upload to codecov.io
+
+## Testing
+
+- test-container library to be used for testing

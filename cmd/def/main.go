@@ -25,7 +25,7 @@ func main() {
 
 	root.Flags().StringVarP(&logLevel, "log", "l", "info", "log level (debug, info, warn, error)")
 
-	root.AddCommand(serverCmd(), ctlCmd(), webConsoleCmd())
+	root.AddCommand(nodeCmd(), ctlCmd())
 
 	if err := root.Execute(); err != nil {
 		os.Exit(1)

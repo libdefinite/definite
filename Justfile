@@ -22,10 +22,10 @@ lint:
     go tool golangci-lint run
     go tool templ fmt -fail .
 
-# Format and lint docs markdown files
+# Format and lint markdown files
 docs:
-    prettier --write "docs/**/*.md"
-    markdownlint "docs/**/*.md"
+    prettier --write "**/*.md" --ignore-path .gitignore
+    markdownlint "**/*.md" --ignore-path .gitignore
 
 # Generate templ files
 templ:
@@ -34,9 +34,20 @@ templ:
 # Build Tailwind CSS (pass minify=true to minify)
 css minify="false":
     npx @tailwindcss/cli \
-        -i ./internal/ctl/web/static/input.css \
-        -o ./internal/ctl/web/static/output.css \
+        -i ./internal/ctl/console/static/input.css \
+        -o ./internal/ctl/console/static/output.css \
         {{ if minify == "true" { "--minify" } else { "" } }}
+
+# Run tests
+test *ARGS:
+    go test {{ ARGS }} ./...
+
+# Generate code coverage report
+coverage:
+    go test -coverprofile=coverage.out ./...
+    grep -v -e "_templ.go" -e "^github.com/libdefinite/definite/gen/" coverage.out > coverage.filtered.out
+    go tool cover -func=coverage.filtered.out
+    go tool cover -html=coverage.filtered.out -o coverage.html
 
 # Build CLI binary
 build: templ css

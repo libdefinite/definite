@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package control.v1;
+
+service CommonService {
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+message HealthCheckRequest {}
+
+message HealthCheckResponse {
+  string status = 1;
+}

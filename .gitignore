@@ -11,6 +11,8 @@
 # Output of go coverage
 *.out
 *.prof
+coverage.html
+coverage.filtered.out
 
 # Dependency directories
 vendor/

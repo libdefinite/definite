@@ -1,4 +1,4 @@
-package web
+package console
 
 import (
 	"embed"
@@ -6,7 +6,7 @@ import (
 	"io/fs"
 	"net/http"
 
-	"github.com/libdefinite/definite/internal/ctl/web/templates"
+	"github.com/libdefinite/definite/internal/ctl/console/templates"
 )
 
 //go:embed static/output.css
