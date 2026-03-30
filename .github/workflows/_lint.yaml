@@ -15,6 +15,9 @@ jobs:
 
       - uses: extractions/setup-just@v3
 
+      - name: Generate templ files
+        run: just templ
+
       - name: Run linters
         run: just lint
 
