@@ -1,37 +1,25 @@
-package main
+package node
 
 import (
 	"fmt"
 	"log/slog"
 	"net/http"
 
-	"github.com/spf13/cobra"
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
-
 	"github.com/libdefinite/definite/gen/control/v1/controlv1connect"
 	"github.com/libdefinite/definite/gen/data/v1/datav1connect"
 	controlhandler "github.com/libdefinite/definite/internal/node/handler/control"
 	datahandler "github.com/libdefinite/definite/internal/node/handler/data"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 )
 
-func nodeCmd() *cobra.Command {
-	var dataPort int
+// Start entry point for node
+func Start(dataPort, controlPort int) error {
+	errc := make(chan error, 2)
+	go serveDataPlane(dataPort, errc)
+	go serveControlPlane(controlPort, errc)
+	return <-errc
 
-	cmd := &cobra.Command{
-		Use:   "node",
-		Short: "Start definite node",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			errc := make(chan error, 2)
-			go serveDataPlane(dataPort, errc)
-			go serveControlPlane(dataPort+10000, errc)
-			return <-errc
-		},
-	}
-
-	cmd.Flags().IntVarP(&dataPort, "port", "p", 9876, "data plane port")
-
-	return cmd
 }
 
 func serveDataPlane(port int, errc chan<- error) {
