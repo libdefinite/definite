@@ -1,0 +1,32 @@
+version: "2"
+
+linters:
+    enable:
+        - bodyclose # unclosed http response bodies
+        - errcheck # unchecked errors
+        - gocritic # broad set of style/correctness checks
+        - govet # correctness
+        - ineffassign # assignments with no effect
+        - misspell # spelling mistakes in comments/strings
+        - noctx # http calls without context
+        - prealloc # slice preallocation opportunities
+        - revive # opinionated style (replaces golint)
+        - staticcheck # advanced static analysis
+        - unconvert # unnecessary type conversions
+        - unparam # unused function parameters
+        - unused # unused code
+
+    settings:
+        goimports:
+            local-prefixes: github.com/libdefinite/definite
+        revive:
+            rules:
+                - name: exported
+                - name: error-return
+                - name: error-naming
+                - name: var-naming
+                - name: indent-error-flow
+
+issues:
+    exclude-dirs:
+        - gen

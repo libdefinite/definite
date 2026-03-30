@@ -1,0 +1,32 @@
+{
+    "name": "Definite",
+    "image": "mcr.microsoft.com/devcontainers/go:1.26",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": { "version": "latest" },
+        "ghcr.io/devcontainers/features/python:1": { "version": "latest" },
+        "ghcr.io/mrsimonemms/devcontainers/buf:1": {},
+        "ghcr.io/guiyomh/features/just:0": {},
+        "ghcr.io/devcontainers-extra/features/tmux-apt-get:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "golang.go",
+                "bufbuild.vscode-buf",
+                "skellock.just",
+                "bierner.markdown-mermaid"
+            ],
+            "settings": {
+                "go.toolsManagement.checkForUpdates": "local",
+                "go.useLanguageServer": true,
+                "buf.binaryPath": "/usr/local/bin/buf"
+            }
+        }
+    },
+    "postCreateCommand": {
+        "tmux": "cp .devcontainer/tmux.conf ~/.tmux.conf && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm",
+        "npm": "npm install -g markdownlint-cli prettier && npm install",
+        "go": "go mod download && go tool lefthook install"
+    }
+}

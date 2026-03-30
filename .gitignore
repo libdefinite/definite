@@ -1,0 +1,63 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of go coverage
+*.out
+*.prof
+coverage.html
+coverage.filtered.out
+
+# Dependency directories
+vendor/
+
+# Go workspace
+go.work
+go.work.sum
+
+# Build output
+bin/
+dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+.zed/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Definite specific
+*.db
+*.db-shm
+*.db-wal
+/data/
+node-data/
+certs/
+*.pem
+*.key
+*.crt
+
+gen/
+
+# Templ generated files
+*_templ.go
+
+# Node
+node_modules/
+internal/ctl/web/static/output.css

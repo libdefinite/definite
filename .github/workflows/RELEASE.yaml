@@ -1,0 +1,35 @@
+name: Coverage
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint:
+    uses: ./.github/workflows/_lint.yaml
+
+  coverage:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      - uses: extractions/setup-just@v3
+
+      - uses: bufbuild/buf-setup-action@v1.50.0
+
+      - name: Generate proto and templ files
+        run: just proto && just templ
+
+      - name: Run tests with coverage
+        run: just coverage
+
+      - uses: codecov/codecov-action@v6
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.filtered.out
