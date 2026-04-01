@@ -54,13 +54,13 @@ certs/
 *.crt
 
 gen/
-
+.prompts/
 # Templ generated files
 *_templ.go
 
 # Node
 node_modules/
-internal/ctl/web/static/output.*
+internal/ctl/console/static/output.*
 
 # Tailwind generated file
 internal/ctl/console/static/output.cssinternal/ctl/console/static/output.js

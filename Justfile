@@ -1,5 +1,5 @@
 default:
-    @just --list
+    just --list
 
 # Generate Go code from proto files
 proto: proto-clean
@@ -50,7 +50,7 @@ css minify="false":
         -o ./internal/ctl/console/static/output.css \
         {{ if minify == "true" { "--minify" } else { "" } }}
 
-# Run tests
+# Run go tests
 test *ARGS:
     go test {{ ARGS }} ./...
 
@@ -69,6 +69,6 @@ dev *ARGS: proto js css
 build: proto templ (js "true") (css "true")
     go build -ldflags="-s -w" -o bin/def ./cmd/def
 
-# Run  (pass args with: just run -- --flag value)
+# Run (pass args with: just run -- --flag value)
 run *ARGS: proto templ js css
     go run ./cmd/def {{ ARGS }}
