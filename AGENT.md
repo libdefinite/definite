@@ -66,16 +66,20 @@ implemented in `internal/ctl`
 
 - **web console** run using `def ctl console`
 - **Templ** for type-safe, compile-time-checked HTML templates. All templates to be placed in `internal/ctl/console/templates` folder
-- **Tailwind CSS v4** (generated from `internal/ctl/console/static/input.css`)
-- **HTMX** + **Alpine.js** loaded via CDN in the layout template
+- **Tailwind CSS v4** (generated from `internal/ctl/console/css/global.css`)
+- **HTMX** + **Alpine.js** bundled locally via Vite (not CDN)
 
 ### Frontend build
 
 Templ templates (`*.templ`) must be compiled to `*_templ.go` before building. `just build` and `just run` handle this automatically. If you edit `.templ` files, run `just templ` or `just format` to regenerate.
 
-#### Tailwind css file output
+#### JS bundle
 
-Tailwind CSS scans `*.templ` files and outputs to `internal/ctl/console/static/output.css`.
+Entry point: `internal/ctl/console/js/main.js`. Vite config in `vite.config.js` bundles htmx and Alpine.js as IIFE to `internal/ctl/console/static/output.js`. Run `just js` to rebuild. Use JSDoc for type annotations — no TypeScript.
+
+#### Tailwind CSS output
+
+Tailwind CSS source in `internal/ctl/console/css/global.css`, scans `*.templ` files and outputs to `internal/ctl/console/static/output.css`.
 
 ### Linting
 

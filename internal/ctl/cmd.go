@@ -1,32 +1,30 @@
 package ctl
 
 import (
-	"github.com/libdefinite/definite/internal/ctl/console"
 	"github.com/spf13/cobra"
+
+	"github.com/libdefinite/definite/internal/ctl/console"
 )
 
-// WebCtlCmd returns the cobra command for starting the web console.
-func WebCtlCmd() *cobra.Command {
+// ConsoleCmd returns the cobra command for starting the web console.
+func ConsoleCmd() *cobra.Command {
 	var port int
-
 	cmd := &cobra.Command{
 		Use:   "console",
-		Short: "Start the web console",
+		Short: "Start web console",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return console.NewConsole(port).Start()
+			return console.New(port).Start()
 		},
 	}
-
-	cmd.Flags().IntVarP(&port, "port", "p", 3000, "server port")
-
+	cmd.Flags().IntVarP(&port, "port", "p", 8765, "console port")
 	return cmd
 }
 
-// FetchCtlCmd returns the cobra command for fetching server status.
-func FetchCtlCmd() *cobra.Command {
+// StatusCmd returns the cobra command for fetching cluster status.
+func StatusCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "status",
-		Short: "Get server status",
+		Short: "Get cluster status",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return nil
 		},

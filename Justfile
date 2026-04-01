@@ -1,5 +1,5 @@
 default:
-    @just --list
+    just --list
 
 # Generate Go code from proto files
 proto: proto-clean
@@ -39,14 +39,18 @@ templ: templ-clean
 templ-clean:
     find . -name "*_templ.go" | xargs rm -f
 
+# Build JS bundle (pass minify=false to skip minification)
+js minify="false":
+    npx vite build {{ if minify == "false" { "--no-minify" } else { "" } }}
+
 # Build Tailwind CSS (pass minify=true to minify)
 css minify="false":
     npx @tailwindcss/cli \
-        -i ./internal/ctl/console/static/input.css \
+        -i ./internal/ctl/console/css/global.css \
         -o ./internal/ctl/console/static/output.css \
         {{ if minify == "true" { "--minify" } else { "" } }}
 
-# Run tests
+# Run go tests
 test *ARGS:
     go test {{ ARGS }} ./...
 
@@ -57,10 +61,14 @@ coverage:
     go tool cover -func=coverage.filtered.out
     go tool cover -html=coverage.filtered.out -o coverage.html
 
-# Build CLI binary
-build: proto templ (css "true")
-    go build -o bin/def ./cmd/def
+# Run console with hot reload (proto, js, css changes do not trigger restart — run those tasks manually in a separate terminal)
+dev *ARGS: proto js css
+    air -- ctl console {{ ARGS }}
 
-# Run  (pass args with: just run -- --flag value)
-run *ARGS: proto templ css
+# Build CLI binary
+build: proto templ (js "true") (css "true")
+    go build -ldflags="-s -w" -o bin/def ./cmd/def
+
+# Run (pass args with: just run -- --flag value)
+run *ARGS: proto templ js css
     go run ./cmd/def {{ ARGS }}

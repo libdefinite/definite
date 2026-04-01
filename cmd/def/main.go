@@ -4,6 +4,8 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/libdefinite/definite/internal/ctl"
+	"github.com/libdefinite/definite/internal/node"
 	"github.com/spf13/cobra"
 )
 
@@ -30,4 +32,30 @@ func main() {
 	if err := root.Execute(); err != nil {
 		os.Exit(1)
 	}
+}
+
+func ctlCmd() *cobra.Command {
+	c := &cobra.Command{
+		Use:   "ctl",
+		Short: "Control the server via gRPC",
+	}
+
+	c.AddCommand(ctl.StatusCmd(), ctl.ConsoleCmd())
+	return c
+}
+
+func nodeCmd() *cobra.Command {
+	var dataPort int
+
+	cmd := &cobra.Command{
+		Use:   "node",
+		Short: "Start definite node",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return node.Start(dataPort, 10000+dataPort)
+		},
+	}
+
+	cmd.Flags().IntVarP(&dataPort, "port", "p", 9876, "data plane port")
+
+	return cmd
 }
